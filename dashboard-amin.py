@@ -75,9 +75,6 @@ scaled_features = scaler.fit_transform(features)
 kmeans = KMeans(n_clusters=3, random_state=42)
 df['cluster'] = kmeans.fit_predict(scaled_features)
 
-# Streamlit Dashboard
-st.header('Bike Rental Analysis Dashboard')
-
 # Clustering visualization
 st.subheader("Clustering Analysis")
 fig, ax = plt.subplots(figsize=(10, 6))
