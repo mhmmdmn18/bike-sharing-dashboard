@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
 
 sns.set(style='dark')
 
@@ -62,6 +64,25 @@ sns.lineplot(x='hr', y='registered', data=main_df, label='Registered', ci=None)
 ax.set_xlabel("Hour of the Day")
 ax.set_ylabel("Number of Rentals")
 ax.legend()
+st.pyplot(fig)
+
+# Feature selection for clustering
+features = df[['temp', 'atemp', 'hum', 'windspeed', 'cnt']]
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(features)
+
+# Apply K-Means Clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+df['cluster'] = kmeans.fit_predict(scaled_features)
+
+# Streamlit Dashboard
+st.header('Bike Rental Analysis Dashboard')
+
+# Clustering visualization
+st.subheader("Clustering Analysis")
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.scatterplot(x=df['temp'], y=df['cnt'], hue=df['cluster'], palette='viridis', ax=ax)
+ax.set_title("Clusters based on Temperature and Bike Rentals")
 st.pyplot(fig)
 
 st.caption('Copyright © Muhammad Aminuddin 2025')
